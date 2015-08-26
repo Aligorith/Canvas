@@ -57,7 +57,9 @@ class PaintingCanvas(GradientWindow):
 		
 		# current stroke - only valid when painting
 		self.curstroke = None
-
+		
+		# use crosshair cursor, for more accuracy when painting
+		self.setCursor(qcore.Qt.CrossCursor)
 
 		# update keymap
 		self.bind_shortcuts()
