@@ -58,6 +58,17 @@ class PaintingCanvas(GradientWindow):
 		# current stroke - only valid when painting
 		self.curstroke = None
 
+
+		# update keymap
+		self.bind_shortcuts()
+	
+	# Setup keymap
+	def bind_shortcuts(self):
+		keymap = {
+			's'    : self.toggle_shadows,
+		}
+		self.bind_keymap(keymap)
+
 	# Rendering ========================
 
 	# Entrypoint for painting
@@ -223,10 +234,15 @@ class PaintingCanvas(GradientWindow):
 	# Change stroke thickness
 	def wheelEvent(self, evt):
 		steps = evt.delta() / 120
-
+		
 		self.thickness += steps
 		self.thickness = max(1, self.thickness) # clamp lower bound
+		
+		self.repaint()
 
+	# Toggle shadow visibility
+	def toggle_shadows(self):
+		self.show_shadows ^= True
 		self.repaint()
 
 ########################################
