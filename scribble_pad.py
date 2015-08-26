@@ -74,6 +74,7 @@ class PaintingCanvas(GradientWindow):
 			
 			'F1'        : self.load_canvas,
 			'F2'        : self.save_canvas,
+			'F12'       : self.export_display,
 			
 			'Ctrl+z'    : self.undo_stroke,
 			'Del'	 	: self.clear_canvas,
@@ -305,7 +306,16 @@ class PaintingCanvas(GradientWindow):
 			self.setWindowTitle(path)
 			print "Saved to %s" % (path)
 
-	# Render 
+	# Render the current display out to a file
+	def export_display(self):
+		path = qgui.QFileDialog.getSaveFileName(self, "Export Current View", "./sketch_capture.png", "PNG Files (*.png)")
+		if not path:
+			return
+
+		pixmap = qgui.QPixmap.grabWidget(self)
+		pixmap.save(path, 'png')
+		print "Saved capture of current view to %s" % (path)
+
 	
 	# Clear all strokes
 	def clear_canvas(self):
