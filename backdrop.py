@@ -64,7 +64,9 @@ class GradientWindow(qgui.QWidget):
 			'q'			: self.quit,
 			'z'			: self.toggleColors,
 		}
+		self.bind_keymap(keymap)
 		
+	def bind_keymap(self, keymap):
 		for key, cmd in keymap.items():
 			shortcut = qgui.QShortcut(qgui.QKeySequence(key), self)
 			shortcut.activated.connect(cmd)
