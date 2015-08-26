@@ -47,6 +47,7 @@ class PaintingCanvas(GradientWindow):
 	# ctor
 	def __init__(self):
 		super(PaintingCanvas, self).__init__([COLOR_BLUE, COLOR_DGRAY])
+		self.setWindowTitle("Scribble Pad Canvas")
 		
 		# width of all strokes
 		self.thickness = 3
@@ -278,7 +279,8 @@ class PaintingCanvas(GradientWindow):
 				self.show_shadows = data['show_shadows']
 				
 				self.current_color = data['bg_index']
-
+				
+				self.setWindowTitle(path)
 				print "'%s' Loaded" % (path)
 				self.repaint()
 			#except:
@@ -300,8 +302,11 @@ class PaintingCanvas(GradientWindow):
 			}
 			json.dump(data, f)
 
+			self.setWindowTitle(path)
 			print "Saved to %s" % (path)
 
+	# Render 
+	
 	# Clear all strokes
 	def clear_canvas(self):
 		self.strokes = []
