@@ -218,6 +218,17 @@ class PaintingCanvas(GradientWindow):
 
 		self.repaint()
 
+	# Shortcuts ------------------------
+
+	# Change stroke thickness
+	def wheelEvent(self, evt):
+		steps = evt.delta() / 120
+
+		self.thickness += steps
+		self.thickness = max(1, self.thickness) # clamp lower bound
+
+		self.repaint()
+
 ########################################
 
 def main():
