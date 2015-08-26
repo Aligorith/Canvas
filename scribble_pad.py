@@ -83,10 +83,12 @@ class PaintingCanvas(GradientWindow):
 	
 	# Draw shadows for strokes
 	def draw_shadows(self, p):
-		col = qgui.QColor("#111111") # "black"
+		col = qgui.QColor(0, 0, 0, 190) # "black"
 		pen = qgui.QPen(col, self.thickness)
+		pen.setCapStyle(qcore.Qt.RoundCap)
+		pen.setJoinStyle(qcore.Qt.RoundJoin)
 
-		ofs = qcore.QPoint(3, 3)
+		ofs = qcore.QPoint(2, 2)
 		thick = self.thickness + 2
 		
 		for stroke in self.strokes:
@@ -112,8 +114,10 @@ class PaintingCanvas(GradientWindow):
 
 	# Draw strokes
 	def draw_strokes(self, p):
-		col = qgui.QColor("white")
+		col = qgui.QColor("#EEEEEE")
 		pen = qgui.QPen(col, self.thickness)
+		pen.setCapStyle(qcore.Qt.RoundCap)
+		pen.setJoinStyle(qcore.Qt.RoundJoin)		
 		
 		for stroke in self.strokes:
 			if len(stroke.points) > 1:
