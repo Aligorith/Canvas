@@ -143,16 +143,18 @@ class PaintingCanvas(GradientWindow):
 
 		if self.curstroke is not None:
 			# move or release? 
-			if evt.type() == qgui.QEvent.TabletMove:
+			if evt.type() == qcore.QEvent.TabletMove:
 				# add another stroke point
 				self.curstroke.add(evt.pos(), evt.pressure())
 				handled = True
-			elif evt.type() == qgui.QEvent.TabletRelease:
+			else: #if evt.type() == qcore.QEvent.TabletRelease:
 				# end stroke
 				self.curstroke.add(evt.pos(), evt.pressure())
 				self.curstroke = None
 				handled = True
-		elif evt.type() == qgui.QEvent.TabletPress:
+			#else:
+			#	print "unhandled tablet event (with stroke) - %s" % (evt.type())
+		elif evt.type() == qcore.QEvent.TabletPress:
 			# start of new stroke
 			self.curstroke = Stroke()
 			self.curstroke.add(evt.pos(), evt.pressure())
@@ -160,12 +162,13 @@ class PaintingCanvas(GradientWindow):
 			self.strokes.append(self.curstroke)
 			handled = True
 
-
 		if handled:
 			evt.accept()
 			self.repaint()
 		else:
-			super(PaintingCanvas, self).tabletEvent(evt)
+			# ignore mousemove that didn't go anywhere
+			evt.accept()
+			pass
 
 	# ------------------------------------
 
@@ -190,6 +193,10 @@ class PaintingCanvas(GradientWindow):
 	
 	# End stroke
 	def mouseReleaseEvent(self, mevt):
+		if self.curstroke is None:
+			mevt.ignore()
+			return
+		
 		self.curstroke.add(mevt.pos())
 		self.curstroke = None
 
