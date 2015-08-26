@@ -65,7 +65,8 @@ class PaintingCanvas(GradientWindow):
 	# Setup keymap
 	def bind_shortcuts(self):
 		keymap = {
-			's'    : self.toggle_shadows,
+			's'    		: self.toggle_shadows,
+			'Del'	 	: self.clear_canvas,
 		}
 		self.bind_keymap(keymap)
 
@@ -224,7 +225,7 @@ class PaintingCanvas(GradientWindow):
 			pressure = mevt.pressure()
 		except:
 			pressure = 1.0
-		self.curstroke.add(mevt.pos())
+		self.curstroke.add(mevt.pos(), pressure)
 		self.curstroke = None
 
 		self.repaint()
@@ -243,6 +244,13 @@ class PaintingCanvas(GradientWindow):
 	# Toggle shadow visibility
 	def toggle_shadows(self):
 		self.show_shadows ^= True
+		self.repaint()
+
+	# Canvas Management -----------------
+	
+	# Clear all strokes
+	def clear_canvas(self):
+		self.strokes = []
 		self.repaint()
 
 ########################################
