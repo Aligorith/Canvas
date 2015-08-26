@@ -6,6 +6,8 @@ using the QTabletEvent stuff to handle tablet events
 """
 
 import sys
+import os
+import json
 
 import PyQt4
 from PyQt4 import QtCore as qcore
@@ -68,6 +70,9 @@ class PaintingCanvas(GradientWindow):
 	def bind_shortcuts(self):
 		keymap = {
 			's'    		: self.toggle_shadows,
+			
+			'F1'        : self.load_canvas,
+			'F2'        : self.save_canvas,
 			
 			'Ctrl+z'    : self.undo_stroke,
 			'Del'	 	: self.clear_canvas,
@@ -252,6 +257,51 @@ class PaintingCanvas(GradientWindow):
 
 	# Canvas Management -----------------
 	
+	# Load canvas configuration from a file
+	def load_canvas(self):
+		path = qgui.QFileDialog.getOpenFileName(self, 'Open Sketch...', ".", "*.canvas")
+		if not path:
+			return
+		
+		with open(path) as f:
+			#try:
+				data = json.load(f)
+				
+				self.strokes = []
+				for sdata in data['strokes']:
+					stroke = Stroke()
+					self.strokes.append(stroke)
+					for spt in sdata:
+						stroke.add(qcore.QPoint(spt[0], spt[1]), spt[2])
+				
+				self.thickness = data['thickness']
+				self.show_shadows = data['show_shadows']
+				
+				self.current_color = data['bg_index']
+
+				print "'%s' Loaded" % (path)
+				self.repaint()
+			#except:
+			#	qgui.QMessageBox.warning(self, "File Loading Error", "%s was not a valid canvas file" % (path))
+	
+	# Serialise canvas to a file
+	def save_canvas(self):
+		path = qgui.QFileDialog.getSaveFileName(self, "Save Sketch...", ".", "*.canvas")
+		if not path:
+			return
+
+		with open(path, 'w') as f:
+			# serialise stroke data to a dict...
+			data = {
+				'strokes'      : [[[pt.co.x(), pt.co.y(), pt.pressure] for pt in stroke.points] for stroke in self.strokes],
+				'thickness'    : self.thickness,
+				'show_shadows' : self.show_shadows,
+				'bg_index'     : self.current_color,
+			}
+			json.dump(data, f)
+
+			print "Saved to %s" % (path)
+
 	# Clear all strokes
 	def clear_canvas(self):
 		self.strokes = []
