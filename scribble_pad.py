@@ -68,6 +68,8 @@ class PaintingCanvas(GradientWindow):
 	def bind_shortcuts(self):
 		keymap = {
 			's'    		: self.toggle_shadows,
+			
+			'Ctrl+z'    : self.undo_stroke,
 			'Del'	 	: self.clear_canvas,
 		}
 		self.bind_keymap(keymap)
@@ -253,6 +255,11 @@ class PaintingCanvas(GradientWindow):
 	# Clear all strokes
 	def clear_canvas(self):
 		self.strokes = []
+		self.repaint()
+
+	# Undo - Remove the last stroke drawn
+	def undo_stroke(self):
+		del self.strokes[-1]
 		self.repaint()
 
 ########################################
