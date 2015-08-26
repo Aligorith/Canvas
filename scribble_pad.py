@@ -136,7 +136,7 @@ class PaintingCanvas(GradientWindow):
 				p.drawEllipse(pt.co, r, r)
 
 	# Drawing ============================
-	
+	dummy = """	
 	# Handle tablet events
 	def tabletEvent(self, evt):
 		handled = False
@@ -169,14 +169,18 @@ class PaintingCanvas(GradientWindow):
 			# ignore mousemove that didn't go anywhere
 			evt.accept()
 			pass
-
+"""
 	# ------------------------------------
 
 	# Start stroke
 	def mousePressEvent(self, mevt):
 		# Create new stroke, and add the current point to it
 		self.curstroke = Stroke()
-		self.curstroke.add(mevt.pos())
+		try:
+			pressure = mevt.pressure()
+		except:
+			pressure = 1.0
+		self.curstroke.add(mevt.pos(), pressure)
 		
 		self.strokes.append(self.curstroke)
 		
@@ -188,7 +192,11 @@ class PaintingCanvas(GradientWindow):
 			mevt.ignore()
 			return
 
-		self.curstroke.add(mevt.pos())
+		try:
+			pressure = mevt.pressure()
+		except:
+			pressure = 1.0
+		self.curstroke.add(mevt.pos(), pressure)
 		self.repaint()
 	
 	# End stroke
@@ -197,6 +205,10 @@ class PaintingCanvas(GradientWindow):
 			mevt.ignore()
 			return
 		
+		try:
+			pressure = mevt.pressure()
+		except:
+			pressure = 1.0
 		self.curstroke.add(mevt.pos())
 		self.curstroke = None
 
