@@ -286,7 +286,7 @@ class PaintingCanvas(GradientWindow):
 	
 	# Serialise canvas to a file
 	def save_canvas(self):
-		path = qgui.QFileDialog.getSaveFileName(self, "Save Sketch...", ".", "*.canvas")
+		path = qgui.QFileDialog.getSaveFileName(self, "Save Sketch...", "./sketch.canvas", "*.canvas")
 		if not path:
 			return
 
